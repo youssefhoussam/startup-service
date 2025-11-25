@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface FounderMemberRepository extends JpaRepository<FounderMember, UUID> {
 
     List<FounderMember> findByStartupId(UUID startupId);
+    int countByStartupId(UUID startupId);
 }

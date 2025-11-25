@@ -6,6 +6,7 @@ import ma.startup.platform.startupservice.client.AuthServiceClient;
 import ma.startup.platform.startupservice.client.UserDTO;
 import ma.startup.platform.startupservice.dto.StartupRequest;
 import ma.startup.platform.startupservice.model.Startup;
+import ma.startup.platform.startupservice.repository.FounderMemberRepository;
 import ma.startup.platform.startupservice.repository.MilestoneRepository;
 import ma.startup.platform.startupservice.repository.StartupRepository;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class StartupService {
     private final StartupRepository startupRepository;
     private final MilestoneRepository milestoneRepository;
     private final AuthServiceClient authServiceClient;
+    private final FounderMemberRepository founderMemberRepository;
 
     @Transactional
     public Startup createStartup(UUID userId, StartupRequest request) {
@@ -99,7 +101,7 @@ public class StartupService {
         Startup startup = getStartupByUserId(userId);
         startupRepository.delete(startup);
     }
-
+    @Transactional
     public Integer calculateProfileCompletion(Startup startup) {
         int score = 0;
 
@@ -116,6 +118,10 @@ public class StartupService {
             score += 20;
         }
         if (startup.getTeam() != null && startup.getTeam().size() >= 2) {
+            score += 20;
+        }
+        int teamSize = founderMemberRepository.countByStartupId(startup.getId());
+        if (teamSize >= 2) {
             score += 20;
         }
 

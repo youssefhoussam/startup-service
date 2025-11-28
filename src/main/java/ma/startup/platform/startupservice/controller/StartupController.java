@@ -101,4 +101,13 @@ public class StartupController {
             return ResponseEntity.badRequest().body("Erreur: " + e.getMessage());
         }
     }
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getStartupByUserId(@PathVariable UUID userId) {
+        try {
+            Startup startup = startupService.getStartupByUserId(userId);
+            return ResponseEntity.ok(StartupResponse.fromStartup(startup));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erreur: " + e.getMessage());
+        }
+    }
 }

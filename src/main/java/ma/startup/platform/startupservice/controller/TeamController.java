@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/startups/me/team")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class TeamController {
 
     private final FounderMemberService founderMemberService;

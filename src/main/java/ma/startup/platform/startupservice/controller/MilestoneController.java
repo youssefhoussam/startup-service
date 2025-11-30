@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/startups/me/milestones")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class MilestoneController {
 
     private final MilestoneService milestoneService;

@@ -7,6 +7,7 @@ import ma.startup.platform.startupservice.dto.FounderMemberRequest;
 import ma.startup.platform.startupservice.dto.FounderMemberResponse;
 import ma.startup.platform.startupservice.model.FounderMember;
 import ma.startup.platform.startupservice.model.Startup;
+import ma.startup.platform.startupservice.repository.FounderMemberRepository;
 import ma.startup.platform.startupservice.service.FounderMemberService;
 import ma.startup.platform.startupservice.service.StartupService;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class TeamController {
 
     private final FounderMemberService founderMemberService;
     private final StartupService startupService;
+    private final FounderMemberRepository founderMemberRepository;
 
     @PostMapping
     public ResponseEntity<?> addTeamMember(
@@ -75,6 +77,16 @@ public class TeamController {
         try {
             founderMemberService.deleteMember(id);
             return ResponseEntity.ok("Membre supprimé avec succès");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erreur: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/startup/{startupId}")
+    public ResponseEntity<?> getTeamByStartupId(@PathVariable UUID startupId) {
+        try {
+            List<FounderMember> team = founderMemberRepository.findByStartupId(startupId);
+            return ResponseEntity.ok(team);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erreur: " + e.getMessage());
         }

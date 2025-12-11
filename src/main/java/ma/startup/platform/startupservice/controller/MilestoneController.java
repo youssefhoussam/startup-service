@@ -7,6 +7,7 @@ import ma.startup.platform.startupservice.dto.MilestoneRequest;
 import ma.startup.platform.startupservice.dto.MilestoneResponse;
 import ma.startup.platform.startupservice.model.Milestone;
 import ma.startup.platform.startupservice.model.Startup;
+import ma.startup.platform.startupservice.repository.MilestoneRepository;
 import ma.startup.platform.startupservice.service.MilestoneService;
 import ma.startup.platform.startupservice.service.StartupService;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class MilestoneController {
 
     private final MilestoneService milestoneService;
     private final StartupService startupService;
+    private final MilestoneRepository milestoneRepository;
 
     @PostMapping
     public ResponseEntity<?> createMilestone(
@@ -85,6 +87,15 @@ public class MilestoneController {
         try {
             milestoneService.deleteMilestone(id);
             return ResponseEntity.ok("Jalon supprimé avec succès");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erreur: " + e.getMessage());
+        }
+    }
+    @GetMapping("/startup/{startupId}")
+    public ResponseEntity<?> getMilestonesByStartupId(@PathVariable UUID startupId) {
+        try {
+            List<Milestone> milestones = milestoneRepository.findByStartupId(startupId);
+            return ResponseEntity.ok(milestones);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erreur: " + e.getMessage());
         }
